@@ -9,7 +9,7 @@ const orderController=require('../controller/admin/oderController')
 const adminAuth = require("../middleware/adminAuth");
 const couponController=require('../controller/admin/couponController')
 const offerController=require('../controller/admin/offerController')
-const bannerController=require('../controller/admin/bannerController')
+
 
 
 
@@ -77,7 +77,5 @@ adminRoute.put("/offerEdit", adminAuth.isLogin,offerController.editOffer );
 adminRoute.get("/blockOffer", adminAuth.isLogin,offerController.offerBlock );
 
 // banner
-adminRoute.get("/bannerAdd", adminAuth.isLogin, bannerController.loadBannerAdd);
-adminRoute.post("/bannerAdd", adminAuth.isLogin, bannerController.addBanner);
-adminRoute.get("/bannerList", adminAuth.isLogin, bannerController.bannerList);
+
 module.exports = adminRoute;
