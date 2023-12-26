@@ -1,0 +1,260 @@
+<style>
+.product-img img {
+  width: 100%; 
+  height: auto; 
+  display: block; 
+}
+
+
+.product-img {
+  max-height: 300px; 
+  overflow: hidden; 
+}
+.product-cart-wrap {
+  height: 400px; 
+  overflow: hidden; /
+}
+  
+</style>
+
+<%- include('../layout/UserHeader.ejs') %>
+
+<main class="main">
+  <div class="page-header breadcrumb-wrap">
+    <div class="container">
+      <div class="breadcrumb">
+        <a href="index.html" rel="nofollow">Home</a>
+        <span></span> Shop
+      </div>
+
+    </div>
+    <div id="cartNotification" style="display: none; position: fixed; top: 20px; right: 20px; background-color: #333; color: #fff; padding: 10px; border-radius: 5px;">
+      Item added to cart!
+    </div>
+  </div>
+  <section class="mt-50 mb-50">
+    <div class="container">
+      <div class="row">
+        
+        <div class="col-lg-9">
+
+          <div class="row product-grid-3"   id="productGrid">
+            <% for (let product of products) { 
+      
+              const categoryId =
+            product.category; categories.forEach(category => { if
+            (categoryId.toString() === category._id.toString()) { if
+            (category.is_listed) { %>
+
+            <div class="col-lg-4 col-md-4 col-12 col-sm-6">
+              <div class="product-cart-wrap mb-30">
+                <div class="product-img-action-wrap">
+                  <div class="product-img product-img-zoom">
+                    <a href="/singleProduct/<%= product._id%>">
+                      <img
+                        class="default-img"
+                        src="/assets/imgs/productIMG/<%= product.image[0]%>"
+                        alt=""
+                      />
+                      <img
+                        class="hover-img"
+                        src="/assets/imgs/productIMG/<%= product.image[1]%>"
+                        alt=""
+                      />
+                    </a>
+                  </div>
+
+                  <div
+                    class="product-badges product-badges-position product-badges-mrg"
+                  >
+                    <span class="hot">Hot</span>
+                  </div>
+                </div>
+                <div class="product-content-wrap">
+                  <div class="product-category">
+                    <a href="shop-grid-right.html">Music</a>
+                  </div>
+                  <h2><a href="/singleProduct/<%= product._id%>"><%= product.name %></a></h2>
+                  <div class="rating-result" title="90%">
+                    <span>
+                      <%if(product.discountStatus==true &&new Date() <= new Date(product.discountEnd)  ){%>
+                                                    <% const percentageOff = ((product.price - product.discountPrice) / product.price) * 100; %>
+                                                    <span style="font-size: 16px; background-color: rgb(255, 255, 255); border-radius: 2px; padding: 5px 10px 5px 10px;" class="old-price ml-3 text-success">- <%= percentageOff.toFixed(2) %>% OFF</span>
+                                                <%}%>
+                   
+                    </span>
+                  </div>
+                  <div class="product-price">
+        <% if (product.discountStatus && new Date() <= new Date(product.discountEnd) ) { %>
+          <span>₹<%= product.discountPrice %> </span>
+          <span class="old-price">- ₹<s><%= product.price %></s></span>
+        <% } else { %>
+          <span> ₹<%= product.price %></span>
+        <% } %>
+      </div>
+                                
+    <div class="product-action-1 show">
+
+        <button type="button" data-bs-toggle="modal" data-bs-target="#exampleModal<%= product._id%>" aria-label="Add To Cart"  class="action-btn hover-up" >
+            <i class="fi-rs-shopping-bag-add"></i>
+        </button>
+    </div>
+
+    <div class="modal fade" id="exampleModal<%= product._id %>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-body">
+        <% product.sizes.forEach(sizeData => { 
+          if (sizeData.stock>0) {
+            %>
+          <div class="d-flex justify-content-start">
+            <input type="hidden" class="productData_id" value="<%= product._id %>" />
+            <input type="hidden" class="qty" value="1" />
+            <input type="radio" class="size" value="<%= sizeData.size %>" style="width:25px" />
+            <label class="ms-3 mt-3"><%= sizeData.size %></label>
+          </div>
+        <%
+          }
+      }); %>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" onclick="addToCart('<%= product._id %>')" class="btn btn-primary">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+                </div>
+              </div>
+            </div>
+
+            <% } } }); } %>
+
+      
+
+
+          </div>
+  
+         
+        </div>
+        <div class="col-lg-3 primary-sidebar sticky-sidebar">
+          <div class="row">
+            <div class="col-lg-12 col-mg-6"></div>
+            <div class="col-lg-12 col-mg-6"></div>
+          </div>
+          <div class="widget-category mb-30">
+            <h5 class="section-title style-1 mb-30 wow fadeIn animated">
+              Category
+            </h5>
+
+            <ul class="categories">
+              <li><a href="/shop"><option value="">All</option></a></li>
+              <% categories.forEach(category=> { if (category.is_listed) { %>
+
+              <li>
+                <a href="shopCategoryFilter?id=<%= category._id %>" >
+                  <option value="<%= category._id %>">
+                    <%= category.name %>
+                  </option></a>
+              </li>
+
+              <% } }); %>
+            </ul>
+          </div>
+          <div class="widget-category mb-30">
+            <h5 class="section-title style-1 mb-30 wow fadeIn animated">
+              brand
+            </h5>
+
+            <ul class="categories">
+              <li><a href="/shop"><option value="">All</option></a></li>
+              <% brands.forEach(brand=> { if (brand.is_listed) { %>
+
+              <li>
+                <a href="shopBrandFilter?id=<%= brand._id %>" >
+                  <option value="<%= brand._id %>">
+                    <%= brand.name %>
+                  </option></a>
+              </li>
+
+              <% } }); %>
+            </ul>
+          </div>
+      
+          
+      
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+<script>
+  function addToCart(productId) {
+    const modal = document.getElementById(`exampleModal${productId}`);
+    const qtyData = modal.querySelector('.qty').value;
+    const productDataId = modal.querySelector('.productData_id').value;
+    const sizeElement = modal.querySelector('.size:checked');
+    const sizeData = sizeElement ? sizeElement.value : null;
+
+    if (qtyData && productDataId && sizeData) {
+      const requestData = {
+        qty: qtyData,
+        size: sizeData,
+        productData_id: productDataId
+      };
+    
+
+      fetch('/cart', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(requestData),
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          const notification = document.getElementById('cartNotification');
+      notification.style.display = 'block';
+
+ 
+      setTimeout(() => {
+        notification.style.display = 'none';
+        window.location.href = '/shop';
+      }, 1000);
+          
+        } else {
+          alert('Error occurred while placing order');
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        alert('Error occurred while placing order');
+      });
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", function () {
+    const searchInput = document.getElementById("searchInput");
+    const productGrid = document.getElementById("productGrid");
+    const products = productGrid.getElementsByClassName("col-lg-4"); // Assuming each card is within a div with class "col-lg-4"
+
+    searchInput.addEventListener("input", function () {
+        const searchText = searchInput.value.toLowerCase();
+
+        for (let i = 0; i < products.length; i++) {
+            const productName = products[i].querySelector("h2 a").textContent.toLowerCase();
+
+            if (!searchText || productName.includes(searchText)) {
+                products[i].style.display = "";
+            } else {
+                products[i].style.display = "none";
+            }
+        }
+    });
+});
+</script>
+<%- include('../Layout/UserFooter.ejs') %>
