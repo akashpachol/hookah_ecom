@@ -47,7 +47,7 @@
                             type="email"
                             id="email"
                             name="email"
-                            onkeyup="emailChaking()"
+                            onkeyup="emailCheking()"
                             placeholder="Enter Email"
                           />
                           <div id="erroremail" class="ms-2 text-danger"></div>
@@ -57,7 +57,7 @@
                             type="text"
                             id="number"
                             name="mobile"
-                            onkeyup="numberChaking()"
+                            onkeyup="numberCheking()"
                             placeholder="Enter Mobile"
                           />
                           <div id="errornumber" class="ms-2 text-danger"></div>
@@ -67,7 +67,7 @@
                             type="password"
                             id="password"
                             name="password"
-                            onkeyup="passwordChaking()"
+                            onkeyup="passwordCheking()"
                             placeholder="Enter Password"
                           />
                           <div
@@ -79,7 +79,7 @@
                           <input
                             type="password"
                             id="cpassword"
-                           
+                            onkeyup="password2Chaking()"
                             placeholder="Confirm Password"
                           />
                           <div
@@ -88,14 +88,24 @@
                           ></div>
                         </div>
 
-                        <div class="form-group">
-                          <label for="referral-toggle"></label>
-                          <a class="btn btn-link" id="referral-toggle">Do you have a referral code?</a>
-                      </div>
-                  
-                      <div class="form-group" id="referral-code-group" style="<%= referral ? 'display: block;' : 'display: none;' %>">
-                          <label for="referralCode">Enter the referral code</label>
-                          <input type="text" class="form-control" name="referralCode" id="referralCode" value="<%= referral %>" <%= referral ? 'readonly' : '' %>>
+                        <div class="">
+                          <div class="toggle_info">
+                            <span>
+                              <i class="fi-rs-label mr-10"></i>
+                              <span class="text-secondary">Have a referral code?</span>
+                              <a href="#referral" data-bs-toggle="collapse" class="collapsed font-weight-bold ms-2"
+                                style="text-decoration: none;" aria-expanded="false">Click here</a>
+                            </span>
+                          </div>
+                          <div class="panel-collapse collapse coupon_form" id="referral">
+                      
+                                <div class="form-group mt-1" id="referral-code-group">
+                                  <label for="referralCode" class="mt-1">Enter the referral code</label>
+                                  <input type="text" class="form-control" name="referralCode" id="referralCode"
+                                    value="<%= referral %>" <%=referral ? 'readonly' : '' %>>
+                            
+                            </div>
+                          </div>
                         </div>
 
                         <div class="form-group text-center">
@@ -143,17 +153,17 @@
     <script>
       function validation(event) {
  
-        if(nameChaking() && emailChaking() && numberChaking() && passwordChaking() ){
+        if(nameChaking() && emailCheking() && numberCheking() && passwordCheking() &&password2Chaking() ){
                 document.getElementById("myForm").submit();                
             }
             else{
               nameChaking();
 
-emailChaking();
+emailCheking();
+password2Chaking();
+numberCheking();
 
-numberChaking();
-
-passwordChaking();
+passwordCheking();
                 return false;
             }
    
@@ -176,7 +186,7 @@ passwordChaking();
         }
       }
 
-      function emailChaking() {
+      function emailCheking() {
         let emailId = document.getElementById("email").value;
         let errorEmail = document.getElementById("erroremail");
 
@@ -189,7 +199,7 @@ passwordChaking();
         }
       }
 
-      function numberChaking() {
+      function numberCheking() {
         let number = document.getElementById("number").value;
         let errorNumber = document.getElementById("errornumber");
 
@@ -204,37 +214,39 @@ passwordChaking();
           return true;
         }
       }
-      let password 
-      function passwordChaking() {
-         password = document.getElementById("password").value;
-        let errorPassword = document.getElementById("errorpassword");
+      let password; // Define the password variable outside the functions
 
-        if (password.trim() === "") {
-          errorPassword.innerHTML = "Please enter your password";
-          return false;
-        } else if (password.length < 8) {
-          errorPassword.innerHTML = "Please enter a minimum of 8 characters";
-          return false;
-        } else {
-          errorPassword.innerHTML = "";
-          return true;
-        }
-      }
-      function password2Chaking() {
-        let cpassword = document.getElementById("cpassword").value;
-        if (cpassword == "") {
-          document.getElementById("errorcpassword").innerHTML =
-            "please enter your password";
-          return false;
-        } else if (cpassword != password) {
-          document.getElementById("errorcpassword").innerHTML =
-            "Password not match";
-          return false;
-        } else {
-          document.getElementById("errorcpassword").innerHTML = "";
-          return true;
-        }
-      }
+function passwordCheking() {
+  password = document.getElementById("password").value;
+  let errorPassword = document.getElementById("errorpassword");
+
+  if (password.trim() === "") {
+    errorPassword.innerHTML = "Please enter your password";
+    return false;
+  } else if (password.length < 8) {
+    errorPassword.innerHTML = "Please enter a minimum of 8 characters";
+    return false;
+  } else {
+    errorPassword.innerHTML = "";
+    return true;
+  }
+}
+
+function password2Chaking() {
+  let cpassword = document.getElementById("cpassword").value;
+  if (cpassword === "") {
+    document.getElementById("errorcpassword").innerHTML =
+      "Please enter your password";
+    return false;
+  } else if (cpassword !== password) {
+    document.getElementById("errorcpassword").innerHTML =
+      "Passwords do not match";
+    return false;
+  } else {
+    document.getElementById("errorcpassword").innerHTML = "";
+    return true;
+  }
+}
     </script>
 
     

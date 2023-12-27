@@ -9,7 +9,12 @@ const dateFun=require("../../config/dateData")
 const listUserOrders = async (req, res) => {
     try {
       const admin = req.session.adminData;
-  
+      const page = parseInt(req.query.page) || 1;
+ 
+    const limit = 6;
+    const totalCount = await Order.countDocuments();
+
+    const totalPages = Math.ceil(totalCount / limit);
     
   
       const orders = await Order.find()
@@ -21,13 +26,17 @@ const listUserOrders = async (req, res) => {
         .populate({
           path: "items.product",
           model: "Product",
-        })
+        }).skip((page - 1) * limit)
+        .limit(limit)
 
-      res.render("admin/allOrder", { order:orders });
+      res.render("admin/allOrder", { order:orders,     totalPages,
+        currentPage: page,  });
     } catch (error) {
       console.log(error.message);
     }
   };
+
+  
 const listOrderDetails=async(req,res)=>{
 
         try {

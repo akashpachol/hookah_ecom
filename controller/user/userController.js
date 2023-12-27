@@ -299,25 +299,33 @@ const resetPassword = async (req, res) => {
   }
 };
 
+
 const loadWallets = async (req, res) => {
   try {
     const userId = req.session.user_id;
-
     const userData = await User.findById(userId);
+
     if (!userData) {
-      return res.render("user/login", { userData: null });
+      return res.render("login", { userData: null });
     }
 
-    const walletData = await Wallet.findOne({ user: userId });
+    const page = parseInt(req.query.page) || 1; // Get page parameter or default to 1
+    const perPage = 7; // Number of transactions per page
+    const offset = (page - 1) * perPage;
+
+    const walletData = await Wallet.findOne({ user: userId }).sort({ date: -1 })
+      .populate({
+        path: 'transaction',
+        options: { skip: offset, limit: perPage },
+      });
 
     if (!walletData) {
-   
-      return res.render("user/wallets", { userData, wallet: null });
+      return res.render("wallet", { userData, wallet: null,currentPage: 0  });
     }
 
-    res.render("user/wallets", { userData, wallet: walletData });
+    res.render("wallet", { userData, wallet: walletData, currentPage: page });
+
   } catch (err) {
-  
     console.error("Error in loadWallets route:", err);
     res.status(500).send("Internal Server Error");
   }
@@ -377,11 +385,19 @@ const loadShop = async (req, res) => {
   try {
     const userId = req.session.user_id;
     const userData = await User.findById(userId);
-    const productData = await Product.find();
+
     const categories = await Category.find();
     const brands = await Brand.find();
+    const page = parseInt(req.query.page) || 1;
+ 
+    const limit = 6;
+    const totalCount = await Product.countDocuments();
     
-    res.render("user/shop", { products: productData, userData, categories,brands });
+    const totalPages = Math.ceil(totalCount / limit);
+    const productData = await Product.find().skip((page - 1) * limit)
+    .limit(limit);
+    res.render("user/shop", { products: productData, userData, categories,brands ,      totalPages,
+      currentPage: page,});
   } catch (error) {
     console.log(error.message);
   }
@@ -392,10 +408,18 @@ const loadShopCategory = async (req, res) => {
     const userId = req.session.user_id;
     const userData = await User.findById(userId);
     const categoryId = req.query.id;
-    const productData = await Product.find({category:categoryId});
+    const page = parseInt(req.query.page) || 1;
+ 
+    const limit = 6;
+    const totalCount = await Product.countDocuments({category:categoryId});
+    
+    const totalPages = Math.ceil(totalCount / limit);
+    const productData = await Product.find({category:categoryId}).skip((page - 1) * limit)
+    .limit(limit);
     const categories = await Category.find();
     const brands = await Brand.find();
-    res.render("user/shop", { products: productData, userData, categories,brands });
+    res.render("user/shop", { products: productData, userData, categories,brands,totalPages,
+      currentPage: page, });
   } catch (error) {
     console.log(error.message);
   }
@@ -405,10 +429,18 @@ const loadShopBrand = async (req, res) => {
     const userId = req.session.user_id;
     const userData = await User.findById(userId);
     const brandId = req.query.id;
-    const productData = await Product.find({brand:brandId});
+    const page = parseInt(req.query.page) || 1;
+ 
+    const limit = 6;
+    const totalCount = await Product.countDocuments({brand:brandId});
+    
+    const totalPages = Math.ceil(totalCount / limit);
+    const productData = await Product.find({brand:brandId}).skip((page - 1) * limit)
+    .limit(limit);
     const categories = await Category.find();
     const brands = await Brand.find();
-    res.render("user/shop", { products: productData, userData, categories,brands });
+    res.render("user/shop", { products: productData, userData, categories,brands,totalPages,
+      currentPage: page, });
   } catch (error) {
     console.log(error.message);
   }

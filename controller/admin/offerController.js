@@ -178,7 +178,7 @@ const OfferList = async (req, res) => {
     const admin = req.session.adminData;
     const page = parseInt(req.query.page) || 1;
     let query = {};
-    const limit = 7;
+    const limit = 6;
     const totalCount = await Offer.countDocuments(query);
 
     const totalPages = Math.ceil(totalCount / limit);

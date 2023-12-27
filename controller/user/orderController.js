@@ -300,15 +300,22 @@ const loadOrderDetails = async (req, res) => {
     const userId = req.session.user_id;
 
     const userData = await User.findById(userId);
+    const page = parseInt(req.query.page) || 1;
+    let query = {};
+    const limit = 6;
+    const totalCount = await Order.countDocuments({ user: userData._id });
+    const totalPages = Math.ceil(totalCount / limit);
     const order = await Order.find({ user: userData._id })
       .populate("user")
       .populate({
         path: "items.product",
         model: "Product",
-      }).sort({ orderDate: -1 } );
+      }).sort({ orderDate: -1 } ) .skip((page - 1) * limit)
+      .limit(limit);
       let orderData=order
     if (userData) {
-      res.render("user/order", { userData, order:orderData });
+      res.render("user/order", { userData, order:orderData,  totalPages,
+        currentPage: page,});
     } else {
       res.redirect("/login");
     }
