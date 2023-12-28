@@ -57,7 +57,7 @@ const loadCartPage = async (req, res) => {
                 cart });
           } else {
               // Handle scenario where user has no cart
-              res.render("user/cart", { userData, cart: null });
+              res.render("user/cart", { userData, cart: null,subtotalWithShipping:0 });
           }
       } else {
           res.redirect('/login');
