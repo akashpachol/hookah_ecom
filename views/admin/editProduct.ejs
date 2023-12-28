@@ -398,8 +398,8 @@ function validationChecking() {
         } else {
             imageError.innerHTML = "";
         }
-    // Size Validation
-    const sizeCount = 5; // Assuming 5 size inputs, update as needed
+
+    const sizeCount = 5; 
     for (let i = 1; i <= sizeCount; i++) {
         const sizeInput = document.getElementById(`size${i}`).value.trim();
         const stockInput = document.getElementById(`stock${i}`).value.trim();

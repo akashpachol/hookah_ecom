@@ -42,7 +42,7 @@ referralCode: {
 },
 userReferred: [{
     type: String,
-    unique: true,
+
 }],
 })
 

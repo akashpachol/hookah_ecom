@@ -320,10 +320,10 @@ const loadWallets = async (req, res) => {
       });
 
     if (!walletData) {
-      return res.render("wallet", { userData, wallet: null,currentPage: 0  });
+      return res.render("user/wallets", { userData, wallet: null,currentPage: 0  });
     }
 
-    res.render("wallet", { userData, wallet: walletData, currentPage: page });
+    res.render("user/wallets", { userData, wallet: walletData, currentPage: page });
 
   } catch (err) {
     console.error("Error in loadWallets route:", err);

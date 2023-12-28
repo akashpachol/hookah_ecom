@@ -4,7 +4,7 @@
         <section class="content-main">
             <div class="content-header">
                 <div>
-                    <h2 class="content-title card-title">Products List</h2>
+                    <h2 class="content-title card-title">User List</h2>
                     <p>Lorem ipsum dolor sit amet.</p>
                 
                 </div>
@@ -186,14 +186,7 @@ function ProductUnlist(productId) {
         }
       });
     }
-
-
-   
-</script>
-
-        <%- include('../layout/adminFooter.ejs') %>
-
-        function Unlistandlist(userId, action) {
+    function Unlistandlist(userId, action) {
                 let titleText, confirmText, successText, url;
                 
                 if (action === 'list') {
@@ -245,3 +238,10 @@ function ProductUnlist(productId) {
                     }
                 });
             }
+
+   
+</script>
+
+        <%- include('../layout/adminFooter.ejs') %>
+
+     
